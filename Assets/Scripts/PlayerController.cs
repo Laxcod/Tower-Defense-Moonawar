@@ -16,6 +16,12 @@ public class PlayerController : MonoBehaviour
     {
         velocity = _velocity;
     }
+
+    public void LookAt(Vector3 lookPoint)
+    {
+        Vector3 offsetPoint = new Vector3 (lookPoint.x, transform.position.y, lookPoint.z);
+        transform.LookAt (offsetPoint);
+    }
     public void FixedUpdate()
     {
         rb.MovePosition (rb.position + velocity *Time.fixedDeltaTime);
