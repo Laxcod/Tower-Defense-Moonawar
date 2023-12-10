@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Vector3 velocity;
+    Rigidbody rb;
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody> ();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Move (Vector3 _velocity) 
     {
-        
+        velocity = _velocity;
+    }
+    public void FixedUpdate()
+    {
+        rb.MovePosition (rb.position + velocity *Time.fixedDeltaTime);
     }
 }
