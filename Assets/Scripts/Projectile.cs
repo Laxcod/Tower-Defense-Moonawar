@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
 {
     float speed = 10;
 
-   public void SetSpeed(float newSpeed)
+   public void setSpeed(float newSpeed)
     {
         speed = newSpeed;
     }
