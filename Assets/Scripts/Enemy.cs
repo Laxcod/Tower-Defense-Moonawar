@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(UnityEngine.AI.NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    UnityEngine.AI.NavMeshAgent pathFinder;
+    Transform target;
+
     void Start()
     {
-        
+        pathFinder = GetComponent<UnityEngine.AI.NavMeshAgent> ();
+        target = GameObject.FindGameObjectWithTag ("Tower").transform;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        pathFinder.SetDestination (target.position);
     }
 }
