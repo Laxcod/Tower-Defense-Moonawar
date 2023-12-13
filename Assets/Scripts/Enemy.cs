@@ -18,6 +18,18 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        pathFinder.SetDestination (target.position);
+
+    }
+
+    IEnumerator UpdatePath()
+    {
+        float refreshRate = .25f;
+
+        while (target != null)
+        {
+            Vector3 targetPosition = new Vector3 (target.position.x, 0, target.position.z);
+            pathFinder.SetDestination (target.position);
+            yield return new WaitForSeconds (refreshRate);
+        }
     }
 }
