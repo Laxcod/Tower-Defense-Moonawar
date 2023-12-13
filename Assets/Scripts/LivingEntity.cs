@@ -31,8 +31,9 @@ public class LivingEntity : MonoBehaviour , IDamageable
         dead = true;
         if (OnDeath != null)
         {
-            
+            OnDeath ();
         }
+        GameObject.Destroy (gameObject);
     }
 
 }
