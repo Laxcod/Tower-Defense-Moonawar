@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     float speed = 10;
+    float damage = 1;
     public LayerMask collisionMask;
 
    public void setSpeed(float newSpeed)
@@ -25,11 +26,18 @@ public class Projectile : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast (ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide))
-        {}
+        {
+            OnHitObject (hit);
+        }
     }
     
-    void onHitObject(RaycastHit hit)
+    void OnHitObject(RaycastHit hit)
     {
+      IDamageable damageableObject = hit.collider.GetComponent<IDamageable> ();
+      if (damageableObject !=null)
+      {
+        damageableObject.TakeHit (damage, hit);
+      }
         GameObject.Destroy (gameObject);
     }
 }
