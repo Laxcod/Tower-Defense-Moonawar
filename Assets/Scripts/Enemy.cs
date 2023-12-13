@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(UnityEngine.AI.NavMeshAgent))]
-public class Enemy : MonoBehaviour
+public class Enemy : LivingEntity
 {
 
     UnityEngine.AI.NavMeshAgent pathFinder;
     Transform target;
 
-    void Start()
+    public override void Start ()
     {
+        base.Start ();
         pathFinder = GetComponent<UnityEngine.AI.NavMeshAgent> ();
         target = GameObject.FindGameObjectWithTag ("Tower").transform;
+
+        StartCoroutine(UpdatePath());
     }
+
+    // void Start()
+    // {
+
+    // }
 
 
     void Update()
@@ -28,7 +36,11 @@ public class Enemy : MonoBehaviour
         while (target != null)
         {
             Vector3 targetPosition = new Vector3 (target.position.x, 0, target.position.z);
-            pathFinder.SetDestination (target.position);
+            if (!dead)
+            {
+                pathFinder.SetDestination (target.position);
+            }
+           
             yield return new WaitForSeconds (refreshRate);
         }
     }

@@ -4,19 +4,25 @@ using UnityEngine;
 
 [RequireComponent (typeof(PlayerController))]
 [RequireComponent (typeof(WeaponController))]
-public class Player : MonoBehaviour
+public class Player : LivingEntity
 {
     public float moveSpeed = 5;
     PlayerController controller;
     WeaponController weaponController;
 
     Camera viewCamera;
-    void Start()
+
+    public override void Start ()
     {
+        base.Start ();
         controller = GetComponent<PlayerController>();
         weaponController = GetComponent<WeaponController> ();
         viewCamera = Camera.main;
     }
+    // void Start()
+    // {
+
+    // }
 
     // Update is called once per frame
     void Update()
