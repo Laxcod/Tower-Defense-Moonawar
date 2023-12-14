@@ -16,6 +16,32 @@ public class LivingEntity : MonoBehaviour , IDamageable
         health = startingHealth;
     }
 
+    public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        takeDamage (damage);
+    }
+
+    public void takeDamage(float damage)
+    {
+        health -= damage;
+
+        if(health <= 0 && !dead)
+        {
+            Die();
+        }
+    }
+
+    [ContextMenu("Self Destruct")]
+    protected void Die()
+    {
+        dead = true;
+        if (OnDeath != null)
+        {
+            OnDeath ();
+        }
+        GameObject.Destroy (gameObject);
+    }
+
     public void TakeHit(float damage, RaycastHit hit)
     {
         health -= damage;
@@ -26,14 +52,14 @@ public class LivingEntity : MonoBehaviour , IDamageable
         }
     }
 
-    protected void Die()
-    {
-        dead = true;
-        if (OnDeath != null)
-        {
-            OnDeath ();
-        }
-        GameObject.Destroy (gameObject);
-    }
+    // protected void Die()
+    // {
+    //     dead = true;
+    //     if (OnDeath != null)
+    //     {
+    //         OnDeath ();
+    //     }
+    //     GameObject.Destroy (gameObject);
+    // }
 
 }
