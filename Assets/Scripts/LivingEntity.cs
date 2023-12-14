@@ -21,7 +21,7 @@ public class LivingEntity : MonoBehaviour , IDamageable
         takeDamage (damage);
     }
 
-    public void takeDamage(float damage)
+    public virtual void takeDamage(float damage)
     {
         health -= damage;
 
@@ -41,25 +41,5 @@ public class LivingEntity : MonoBehaviour , IDamageable
         }
         GameObject.Destroy (gameObject);
     }
-
-    public void TakeHit(float damage, RaycastHit hit)
-    {
-        health -= damage;
-
-        if(health <= 0 && !dead)
-        {
-            Die();
-        }
-    }
-
-    // protected void Die()
-    // {
-    //     dead = true;
-    //     if (OnDeath != null)
-    //     {
-    //         OnDeath ();
-    //     }
-    //     GameObject.Destroy (gameObject);
-    // }
 
 }

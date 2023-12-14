@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7689106130761557656}
   - component: {fileID: 4651397478403596297}
   - component: {fileID: 763570234155286072}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 022370e68019bca4fb90609580f33931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 5
+  startingHealth: 1
   deathEffect: {fileID: 1152241501461959112, guid: 8b6b500c5fc84664e8a26db45c13a886, type: 3}
 --- !u!195 &763570234155286072
 NavMeshAgent:
@@ -184,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4242695557625908636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon Hold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 5193421066415724399}
   - component: {fileID: 8962299422909148924}
   - component: {fileID: 2024622156563668444}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}

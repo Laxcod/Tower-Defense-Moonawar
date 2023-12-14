@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
-[RequireComponent (typeof(UnityEngine.AI.NavMeshAgent))]
 public class Enemy : LivingEntity
 {
-
-    UnityEngine.AI.NavMeshAgent pathFinder;
+    NavMeshAgent pathFinder;
     Transform target;
 
-    public enum State{idle, Chasing, Attacking};
-    public ParticleSystem deathEffect;
-    State CurrentState;
+    public enum State { Idle, Chasing, Attacking};
+    State currentState;
 
-    float attackDistanceThresHold = .5f;
+    float attackDistanceThreshold = .5f;
     float timeBetweenAttack = 1;
 
     float nextAttackTime;
@@ -21,34 +20,88 @@ public class Enemy : LivingEntity
     Material skinMaterial;
     Color originalColor;
 
-    float myCollsionRadius;
+    float myCollisionRadius;
     float targetCollisionRadius;
 
-    public override void Start ()
+    public ParticleSystem deathEffect;
+    Image healthBar;
+    float fill = 1f;
+
+    // Start is called before the first frame update
+    public override void Start()
     {
-        base.Start ();
-        pathFinder = GetComponent<UnityEngine.AI.NavMeshAgent> ();
-        skinMaterial = GetComponent<Renderer> ().material;
+        base.Start();
+
+        skinMaterial = GetComponent<Renderer>().material;
         originalColor = skinMaterial.color;
 
-        CurrentState = State.Chasing;
-        target = GameObject.FindGameObjectWithTag ("Tower").transform;
+        pathFinder = GetComponent<NavMeshAgent>();
+        currentState = State.Chasing;
+        target = GameObject.FindGameObjectWithTag("Tower").transform;
 
-        myCollsionRadius = GetComponent<CapsuleCollider> ().radius;
-        targetCollisionRadius = target.GetComponent<SphereCollider> ().radius;
-        
+        healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Image>();
+
+        myCollisionRadius = GetComponent<CapsuleCollider>().radius;
+        targetCollisionRadius = target.GetComponent<SphereCollider>().radius;
+
         StartCoroutine(UpdatePath());
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Time.time > nextAttackTime)
+        {
+            float sqrDistanceToTarget = (target.position - transform.position).sqrMagnitude;
+            if (sqrDistanceToTarget < Mathf.Pow (attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
+            {
+                nextAttackTime = Time.time + timeBetweenAttack;
+                StartCoroutine(Attack());
+            }
+
+            if(sqrDistanceToTarget < 3)
+            {
+                healthBar.fillAmount -= .05f;
+            }
+        }
+    }
+
+    public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        if (damage >= health)
+        {
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.startLifetime);
+        }
+        base.TakeHit(damage, hitPoint, hitDirection);
+    }
+
+    IEnumerator  UpdatePath()
+    {
+        float refreshRate = .25f;
+        while (target != null)
+        {
+            if (currentState == State.Chasing)
+            {
+                Vector3 dirToTarget = (target.position - transform.position).normalized;
+                Vector3 targetPosition =  target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold/2);
+                if (!dead)
+                {
+                    pathFinder.SetDestination(target.position);
+                }
+            }
+            yield return new WaitForSeconds (refreshRate);
+        }
     }
 
     IEnumerator Attack()
     {
-        CurrentState = State.Attacking;
+        currentState = State.Attacking;
         pathFinder.enabled = false;
 
-        Vector3 originalPosition = transform.position;
+        Vector3 originalposition = transform.position;
 
         Vector3 dirToTarget = (target.position - transform.position).normalized;
-        Vector3 attackPosition = target.position - dirToTarget * (myCollsionRadius);
+        Vector3 attackPosition = target.position - dirToTarget * (myCollisionRadius);
 
         float attackSpeed = 3;
         float percent = 0;
@@ -58,59 +111,15 @@ public class Enemy : LivingEntity
         while (percent <= 1)
         {
             percent += Time.deltaTime * attackSpeed;
-            float interpolation = (-Mathf.Pow (percent, 2) + percent) * 4;
-            transform.position = Vector3.Lerp (originalPosition, attackPosition ,interpolation);
+            float interpolation = (-Mathf.Pow(percent, 2) + percent) * 4;
+            transform.position = Vector3.Lerp(originalposition, attackPosition, interpolation);
 
             yield return null;
         }
+
         skinMaterial.color = originalColor;
 
-        CurrentState = State.Chasing;
+        currentState = State.Chasing;
         pathFinder.enabled = true;
-    }
-
-    public override void TakeHit(float damage, Vector3 hitpoint, Vector3 hitDirection)
-    {
-        if(damage >= health)
-        {
-            Destroy (Instantiate (deathEffect.gameObject, hitpoint, Quaternion.FromToRotation (Vector3.forward, hitDirection)) as GameObject, deathEffect.startLifetime);
-        }
-        base.TakeHit (damage, hitpoint, hitDirection);
-    }
-
-    // void Start()
-    // {
-
-    // }
-
-
-    void Update()
-    {
-        if (Time.time > nextAttackTime)
-        {
-            float sqrDistanceToTarget = (target.position - transform.position).sqrMagnitude;
-            if (sqrDistanceToTarget < Mathf.Pow (attackDistanceThresHold + myCollsionRadius + targetCollisionRadius, 2))
-            nextAttackTime = Time.time + timeBetweenAttack;
-            StartCoroutine (Attack ());
-        }
-    }
-
-    IEnumerator UpdatePath()
-    {
-        float refreshRate = .25f;
-
-        while (target != null)
-        {
-            if (CurrentState == State.Chasing)
-            {
-                Vector3 dirToTarget = (target.position - transform.position).normalized;
-                Vector3 targetPosition = target.position - dirToTarget * (myCollsionRadius + targetCollisionRadius + attackDistanceThresHold/2);
-            if (!dead)
-                {
-                    pathFinder.SetDestination (target.position);
-                }    
-            }
-            yield return new WaitForSeconds (refreshRate);
-        }
     }
 }

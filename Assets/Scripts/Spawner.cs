@@ -15,7 +15,7 @@ public class Spawner : MonoBehaviour
     int enemyRemainingAlive;
     float nextSpawnTime;
 
-    Vector3 spawnPoisition = new Vector3 (0, 0,8);
+    Vector3 spawnPoisition = new Vector3 (2, 1,10);
 
 void Start()
 {

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Tower
+  - HealthBar
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,11 +15,11 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Tower
   - Enemy
   - 'Ground '
   - Block
-  - 
+  - HealthBar
   - 
   - 
   - 
