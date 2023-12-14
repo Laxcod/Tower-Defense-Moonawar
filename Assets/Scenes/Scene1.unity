@@ -1013,10 +1013,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - enemyCount: 2
-    timeBetweenSpawns: 10
-  - enemyCount: 2
-    timeBetweenSpawns: 20
+  - enemyCount: 6
+    timeBetweenSpawns: 3
+  - enemyCount: 12
+    timeBetweenSpawns: 12
   enemy: {fileID: 4651397478403596297, guid: 548ac4f8e27d1b64d89f642ecb7fcd9d, type: 3}
 --- !u!1 &683820015
 GameObject:
@@ -1748,7 +1748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1110555717
 MonoBehaviour:
   m_ObjectHideFlags: 0
