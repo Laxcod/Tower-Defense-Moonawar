@@ -10,6 +10,7 @@ public class Enemy : LivingEntity
     Transform target;
 
     public enum State{idle, Chasing, Attacking};
+    public ParticleSystem deathEffect;
     State CurrentState;
 
     float attackDistanceThresHold = .5f;
@@ -66,6 +67,15 @@ public class Enemy : LivingEntity
 
         CurrentState = State.Chasing;
         pathFinder.enabled = true;
+    }
+
+    public override void TakeHit(float damage, Vector3 hitpoint, Vector3 hitDirection)
+    {
+        if(damage >= health)
+        {
+            Destroy (Instantiate (deathEffect.gameObject, hitpoint, Quaternion.FromToRotation (Vector3.forward, hitDirection)) as GameObject, deathEffect.startLifetime);
+        }
+        base.TakeHit (damage, hitpoint, hitDirection);
     }
 
     // void Start()
